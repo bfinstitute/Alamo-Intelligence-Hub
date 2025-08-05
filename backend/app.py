@@ -19,6 +19,15 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 GEMINI_API_KEY = os.getenv('GOOGLE_API_KEY', '')
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"
 
+# Debug logging
+print(f"=== Flask App Startup ===")
+print(f"API Key available: {bool(GEMINI_API_KEY)}")
+print(f"API Key length: {len(GEMINI_API_KEY) if GEMINI_API_KEY else 0}")
+if GEMINI_API_KEY:
+    print(f"API Key starts with: {GEMINI_API_KEY[:10]}...")
+else:
+    print("❌ NO API KEY FOUND!")
+
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
     if 'file' not in request.files:
@@ -73,6 +82,12 @@ Only return the JSON object, no other text.
 """
     
     try:
+        # Debug logging for Gemini API call
+        print(f"=== Gemini API Call ===")
+        print(f"API Key available: {bool(GEMINI_API_KEY)}")
+        print(f"Number of columns: {len(columns_list)}")
+        print(f"Sample data length: {len(sample_data)}")
+        
         # Call Gemini API
         headers = {
             'Content-Type': 'application/json',
@@ -98,10 +113,20 @@ Only return the JSON object, no other text.
             if 'candidates' in result and len(result['candidates']) > 0:
                 ai_response = result['candidates'][0]['content']['parts'][0]['text']
                 try:
+                    # Clean the response - remove markdown code blocks if present
+                    cleaned_response = ai_response.strip()
+                    if cleaned_response.startswith('```json'):
+                        cleaned_response = cleaned_response[7:]  # Remove ```json
+                    if cleaned_response.endswith('```'):
+                        cleaned_response = cleaned_response[:-3]  # Remove ```
+                    cleaned_response = cleaned_response.strip()
+                    
                     # Try to parse as JSON
-                    ai_annotations = json.loads(ai_response)
+                    ai_annotations = json.loads(cleaned_response)
                     annotations = ai_annotations
-                except json.JSONDecodeError:
+                except json.JSONDecodeError as e:
+                    print(f"JSON parsing error: {e}")
+                    print(f"Cleaned response: {cleaned_response}")
                     # Fallback to human descriptions
                     annotations = {col: human_column_description(col) for col in columns_list}
             else:
