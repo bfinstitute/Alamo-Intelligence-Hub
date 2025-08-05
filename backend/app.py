@@ -16,7 +16,7 @@ UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Gemini API Configuration
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+GEMINI_API_KEY = os.getenv('GOOGLE_API_KEY', '')
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"
 
 @app.route('/api/upload', methods=['POST'])
@@ -31,12 +31,19 @@ def upload_file():
     # --- CSV Summary ---
     try:
         df = pd.read_csv(filepath)
+        # Handle NaN values before converting to JSON
+        df_clean = df.replace({pd.NA: None, pd.NaT: None})
+        df_clean = df_clean.where(pd.notnull(df_clean), None)
+        
+        # Clean sample data
+        sample_data = df_clean.head(5).to_dict(orient='records')
+        
         summary = {
             'filename': file.filename,
             'num_rows': len(df),
             'num_columns': len(df.columns),
             'columns': list(df.columns),
-            'sample': df.head(5).to_dict(orient='records')
+            'sample': sample_data
         }
     except Exception as e:
         return jsonify({'error': f'Failed to process CSV: {str(e)}'}), 500
@@ -45,7 +52,7 @@ def upload_file():
     annotations = {}
     
     # Get sample data for context
-    sample_data = df.head(3).to_dict(orient='records')
+    sample_data = df_clean.head(3).to_dict(orient='records')
     sample_text = "\n".join([f"Row {i+1}: {json.dumps(row)}" for i, row in enumerate(sample_data)])
     
     # Create prompt for all columns at once
@@ -105,17 +112,25 @@ Only return the JSON object, no other text.
     
     except Exception as e:
         print(f"Error calling Gemini API: {str(e)}")
+        print(f"API Key available: {bool(GEMINI_API_KEY)}")
+        print(f"API Key length: {len(GEMINI_API_KEY) if GEMINI_API_KEY else 0}")
         annotations = {col: human_column_description(col) for col in columns_list}
-    return jsonify({
+    # Clean the entire response to remove any NaN values
+    response_data = {
         'success': True,
         'message': 'File uploaded successfully',
         'summary': summary,
         'annotations': annotations,
         'filename': file.filename,
-        'data': summary['sample'],
+        'data': df_clean.head(5).to_dict(orient='records'),
         'stats': summary,
         'column_descriptions': annotations
-    }), 200
+    }
+    
+    # Clean any remaining NaN values
+    cleaned_response = clean_nan_values(response_data)
+    
+    return jsonify(cleaned_response), 200
 
 @app.route('/api/get_column_description', methods=['POST'])
 def get_column_description():
@@ -333,18 +348,61 @@ def submit_feedback():
         'message': 'Feedback submitted successfully'
     })
 
+# Function to recursively clean NaN values from any data structure
+def clean_nan_values(obj):
+    if isinstance(obj, dict):
+        return {key: clean_nan_values(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [clean_nan_values(item) for item in obj]
+    elif pd.isna(obj) or obj == 'nan' or str(obj).lower() == 'nan':
+        return None
+    else:
+        return obj
+
 # Add this function to provide human-readable descriptions
 
 def human_column_description(col):
     col = col.lower()
+    
+    # Transit/Transportation specific patterns
+    if 'route_id' in col or 'route' in col:
+        return 'Unique identifier for the transit route or bus/train line.'
+    if 'trip_id' in col or 'trip' in col:
+        return 'Unique identifier for a specific transit trip or journey.'
+    if 'trip_headsign' in col or 'headsign' in col:
+        return 'Destination display name shown on the transit vehicle.'
+    if 'block_id' in col or 'block' in col:
+        return 'Vehicle block identifier for transit scheduling.'
+    if 'service_id' in col or 'service' in col:
+        return 'Service schedule identifier for transit operations.'
+    if 'shape_id' in col or 'shape' in col:
+        return 'Geographic route shape identifier for mapping.'
+    if 'stop_id' in col or 'stop' in col:
+        return 'Unique identifier for a transit stop or station.'
+    if 'agency_id' in col or 'agency' in col:
+        return 'Transit agency identifier.'
+    if 'vehicle_id' in col or 'vehicle' in col:
+        return 'Unique identifier for a transit vehicle.'
+    
+    # General ID patterns
     if 'id' in col and 'client' in col:
         return 'Unique identifier for the client or requester.'
     if 'id' in col and 'case' in col:
         return 'Unique identifier for each case or service request.'
+    if 'id' in col:
+        return 'Unique identifier for this record.'
+    
+    # Date and time patterns
     if 'date' in col and 'open' in col:
         return 'Date when the case was opened.'
     if 'date' in col and 'close' in col:
         return 'Date when the case was closed.'
+    if 'date' in col:
+        return 'Date information for this record.'
+    if 'time' in col:
+        return 'Time information for this record.'
+    
+    # Service and SLA patterns
     if 'sla' in col:
         return 'Service Level Agreement (SLA) related date or days.'
     if 'late' in col:
@@ -355,6 +413,8 @@ def human_column_description(col):
         return 'Source of the case (e.g., phone, web, app).'
     if 'desc' in col:
         return 'Description or address related to the case.'
+    
+    # Location patterns
     if 'district' in col:
         return 'City council district where the case occurred.'
     if 'coord' in col:
@@ -363,6 +423,8 @@ def human_column_description(col):
         return 'Latitude coordinate of the case location.'
     if 'long' in col:
         return 'Longitude coordinate of the case location.'
+    
+    # Time and duration patterns
     if 'duration' in col:
         return 'Duration of the case.'
     if 'day' in col:
@@ -375,6 +437,8 @@ def human_column_description(col):
         return 'Hour related to the case.'
     if 'fiscal' in col:
         return 'Fiscal year in which the case was opened.'
+    
+    # Weather patterns
     if 'week' in col:
         return 'Weekly weather or environmental data.'
     if 'prcp' in col:
@@ -391,8 +455,13 @@ def human_column_description(col):
         return 'Average temperature.'
     if 'tdif' in col:
         return 'Temperature difference.'
+    
+    # Count patterns
     if 'cases' == col:
         return 'Number of cases.'
+    if 'count' in col:
+        return 'Count or quantity measurement.'
+    
     return 'No description available.'
 
 if __name__ == '__main__':
