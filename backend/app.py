@@ -32,9 +32,12 @@ USERS = {
 }
 
 # Configure Google Gemini API
-GOOGLE_API_KEY = 'AIzaSyB65IMwrtbiJw2iWzV_sSFRTs7ci83mckM'
-genai.configure(api_key=GOOGLE_API_KEY)
-model = genai.GenerativeModel('gemini-pro')
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+if GOOGLE_API_KEY:
+    genai.configure(api_key=GOOGLE_API_KEY)
+    model = genai.GenerativeModel('gemini-pro')
+else:
+    model = None
 
 # Create upload folder if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -61,7 +64,15 @@ def verify_token(token):
         return None
 
 def get_column_descriptions(columns):
-    """Get column descriptions from Google Gemini API"""
+    """Get column descriptions from Google Gemini API or fallback to intelligent descriptions"""
+    # Check if Gemini API is available
+    if model is None:
+        print("Google API key not configured, using intelligent descriptions")
+        descriptions = {}
+        for column in columns:
+            descriptions[column] = create_intelligent_description(column)
+        return descriptions
+    
     try:
         # Create a much better prompt for Gemini
         prompt = f"""

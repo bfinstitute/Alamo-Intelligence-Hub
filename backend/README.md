@@ -44,6 +44,24 @@ A Flask-based backend API for the CSV Analyzer application.
 
 - `FLASK_ENV`: Set to `development` for debug mode
 - `FLASK_DEBUG`: Set to `1` to enable debug mode
+- `GOOGLE_API_KEY`: (Optional) Google Gemini API key for enhanced column descriptions. If not provided, intelligent fallback descriptions will be used.
+
+### Setting up Google API Key (Optional)
+
+To enable enhanced column descriptions using Google's Gemini API:
+
+1. Get a Google API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Set the environment variable:
+   ```bash
+   export GOOGLE_API_KEY=your_api_key_here
+   ```
+   
+   Or on Windows:
+   ```cmd
+   set GOOGLE_API_KEY=your_api_key_here
+   ```
+
+3. If no API key is provided, the application will use intelligent fallback descriptions based on column name patterns.
 
 ## File Upload Limits
 
