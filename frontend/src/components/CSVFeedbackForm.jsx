@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../styles/CSVFeedbackForm.css'
+import apiService from '../services/api';
 
 const CSVFeedbackForm = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const CSVFeedbackForm = () => {
     terminology: '',
     additionalContext: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,11 +21,28 @@ const CSVFeedbackForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can send this data to a backend or use it however you want
-    console.log('Form Submitted:', formData);
-    alert('Feedback submitted. Thank you!');
+    setIsSubmitting(true);
+    setSubmitMessage('');
+    
+    try {
+      const result = await apiService.submitFeedback(formData);
+      setSubmitMessage('Feedback submitted successfully! Thank you.');
+      // Reset form after successful submission
+      setFormData({
+        purpose: '',
+        stakeholders: '',
+        incorrectFields: '',
+        terminology: '',
+        additionalContext: ''
+      });
+    } catch (error) {
+      console.error('Feedback submission error:', error);
+      setSubmitMessage('Failed to submit feedback. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -51,7 +71,15 @@ const CSVFeedbackForm = () => {
         </label>
       </fieldset>
 
-      <button type="submit">Submit Feedback</button>
+      {submitMessage && (
+        <div className={`submit-message ${submitMessage.includes('successfully') ? 'success' : 'error'}`}>
+          {submitMessage}
+        </div>
+      )}
+
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+      </button>
     </form>
   );
 };

@@ -1,70 +1,134 @@
-# Getting Started with Create React App
+# CSV Analyzer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application for analyzing and processing CSV files with a modern React frontend and Flask backend.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+```
+csvAnalyzer-frontend/
+├── backend/          # Flask backend API
+│   ├── app.py        # Main Flask application
+│   ├── requirements.txt
+│   └── README.md
+└── frontend/         # React frontend application
+    ├── src/
+    ├── public/
+    ├── package.json
+    └── README.md
+```
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend (React)
+- **Modern UI**: Clean, responsive design with drag-and-drop file upload
+- **CSV Preview**: Interactive table view with column descriptions
+- **Progress Tracking**: Multi-step workflow with progress indicators
+- **Real-time Validation**: Client-side file validation
+- **Download Functionality**: Export processed CSV files
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Backend (Flask)
+- **File Upload**: Secure CSV file upload with validation
+- **Data Analysis**: Comprehensive CSV analysis and statistics
+- **Data Processing**: Advanced data manipulation capabilities
+- **API Endpoints**: RESTful API for all operations
+- **Error Handling**: Robust error handling and validation
 
-### `npm test`
+## Quick Start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js (v16 or higher)
+- Python (v3.8 or higher)
+- npm or yarn
 
-### `npm run build`
+### Backend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Navigate to backend directory:**
+   ```bash
+   cd backend
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Run the Flask server:**
+   ```bash
+   python app.py
+   ```
 
-### `npm run eject`
+   The backend will be available at `http://localhost:5000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Frontend Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Navigate to frontend directory:**
+   ```bash
+   cd frontend
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. **Install Node.js dependencies:**
+   ```bash
+   npm install
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Start the React development server:**
+   ```bash
+   npm start
+   ```
 
-## Learn More
+   The frontend will be available at `http://localhost:3000`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API Endpoints
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Backend API (http://localhost:5000/api)
 
-### Code Splitting
+- `GET /health` - Health check
+- `POST /upload` - Upload CSV file
+- `POST /analyze` - Analyze CSV data
+- `POST /download` - Download processed CSV
+- `POST /validate` - Validate CSV data
+- `POST /feedback` - Submit user feedback
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Development
 
-### Analyzing the Bundle Size
+### Backend Development
+- The Flask app runs in debug mode by default
+- Auto-reload is enabled for development
+- Check `backend/README.md` for detailed backend documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Frontend Development
+- React development server with hot reload
+- Uses React Router for navigation
+- Context API for state management
+- Check `frontend/README.md` for detailed frontend documentation
 
-### Making a Progressive Web App
+## Environment Variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Frontend (.env)
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
 
-### Advanced Configuration
+### Backend
+```
+FLASK_ENV=development
+FLASK_DEBUG=1
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## File Upload Limits
 
-### Deployment
+- Maximum file size: 16MB
+- Supported formats: CSV only
+- Automatic file validation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contributing
 
-### `npm run build` fails to minify
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test both frontend and backend
+5. Submit a pull request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+This project is licensed under the MIT License. 

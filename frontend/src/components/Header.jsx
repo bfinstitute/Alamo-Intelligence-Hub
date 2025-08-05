@@ -1,5 +1,5 @@
 import '../styles/Header.css';
-import mainLogo from '../assets/images/BFI_Logo.svg'
+import mainLogo from '../assets/images/BFI_logo.svg'
 import menuLogo from '../assets/images/iconoir_menu.svg'
 import mainLogoIcon from '../assets/images/BFI_LogoIcon.svg'
 

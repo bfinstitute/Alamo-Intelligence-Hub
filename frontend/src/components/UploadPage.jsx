@@ -1,32 +1,45 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Papa from 'papaparse';
 import '../styles/UploadPage.css';
 import { useCsv } from '../context/CsvContext';
 import Header from './Header';
 import uploadLogo from '../assets/images/iconoir_cloud-upload.svg'
 import ProgressDots from './ProgressDots';
 import UploadInfo from './UploadInfo';
+import apiService from '../services/api';
 
 export default function UploadPage() {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
-  const { setCsvData, setFileName, fileName, csvData } = useCsv(); // ✅ usar contexto
+  const { setCsvData, setFileName, setCsvStats, setColumnDescriptions, fileName, csvData } = useCsv();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
-  const handleFile = (file) => {
+  const handleFile = async (file) => {
     if (file && file.type === 'text/csv') {
-      setFileName(file.name);
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        dynamicTyping: true,
-        complete: (results) => {
-          setCsvData(results.data);
+      setIsUploading(true);
+      setUploadError('');
+      
+      try {
+        const result = await apiService.uploadCSV(file);
+        
+        if (result.success) {
+          setFileName(result.filename);
+          setCsvData(result.data);
+          setCsvStats(result.stats);
+          setColumnDescriptions(result.column_descriptions || {});
           navigate('/edit');
-        },
-      });
+        } else {
+          setUploadError('Upload failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        setUploadError(error.message || 'Upload failed. Please try again.');
+      } finally {
+        setIsUploading(false);
+      }
     } else {
-      alert('Please upload a valid CSV file.');
+      setUploadError('Please upload a valid CSV file.');
     }
   };
 
@@ -62,8 +75,14 @@ export default function UploadPage() {
           <div className="dropzone-content">
             <img src={uploadLogo} alt="Upload Logo"/>
             <p className="dropzone-text">Drag and drop a CSV or browse to attach</p>
-            <button className="attach-button" onClick={() => fileInputRef.current.click()}>
-              Upload Your CSV
+            {isUploading && <p className="upload-status">Uploading...</p>}
+            {uploadError && <p className="upload-error">{uploadError}</p>}
+            <button 
+              className="attach-button" 
+              onClick={() => fileInputRef.current.click()}
+              disabled={isUploading}
+            >
+              {isUploading ? 'Uploading...' : 'Upload Your CSV'}
             </button>
           </div>
         </div>

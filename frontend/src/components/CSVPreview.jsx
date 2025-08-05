@@ -6,6 +6,7 @@ import downloadLogo from "../assets/images/iconoir_download.svg"
 import infoIcon from "../assets/images/Icon=info-circle.svg";
 import transferIcon from "../assets/images/Icon=data-transfer-both.svg";
 import sparkIcon from "../assets/images/Icon=spark.svg"
+import apiService from '../services/api';
 
 const headerDescriptions = {
   street: 'The street name or location info.',
@@ -16,8 +17,9 @@ const headerDescriptions = {
 
 export default function CSVPreview() {
   const navigate = useNavigate();
-  const { csvData } = useCsv();
+  const { csvData, fileName, columnDescriptions } = useCsv();
   const [visibleHeader, setVisibleHeader] = useState(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   if (!csvData || csvData.length === 0) {
     return <div className="preview-table">No data to display.</div>;
@@ -25,19 +27,16 @@ export default function CSVPreview() {
 
   const headers = Object.keys(csvData[0]);
 
-  const handleDownload = () => {
-    const csv = [
-      headers.join(','),
-      ...csvData.map((row) =>
-        headers.map((key) => JSON.stringify(row[key] || '')).join(',')
-      ),
-    ].join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'preview.csv';
-    a.click();
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      await apiService.downloadCSV(csvData, fileName || 'processed_data.csv');
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try again.');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
 return (
@@ -63,7 +62,7 @@ return (
                     </div>
                     {visibleHeader === header && (
                         <div className="header-description">
-                        {headerDescriptions[header] || <p><img src={ sparkIcon } alt="*" className="spark-icon" /> No description available.</p>}
+                        {columnDescriptions[header] || headerDescriptions[header] || <p><img src={ sparkIcon } alt="*" className="spark-icon" /> No description available.</p>}
                         </div>
                     )}
                     </th>
@@ -82,7 +81,14 @@ return (
             </table>
         </div>
         <div className="buttons">
-            <button onClick={handleDownload} className='button-base download-btn'><img src={downloadLogo} alt="Download Logo"/></button>
+            <button 
+              onClick={handleDownload} 
+              className='button-base download-btn'
+              disabled={isDownloading}
+            >
+              <img src={downloadLogo} alt="Download Logo"/>
+              {isDownloading ? 'Downloading...' : ''}
+            </button>
             <button className='button-base back-btn' onClick={() => navigate('/upload')}>Back</button>
             <button className='button-base next-btn' onClick={() => navigate('/success')}>Finalize</button>
         </div>

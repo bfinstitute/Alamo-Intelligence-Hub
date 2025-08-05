@@ -3,23 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Home.css';
 import mainLogoWhite from '../assets/images/BFI_Logo(White).svg'
-import mainLogo from '../assets/images/BFI_Logo.svg'
+import mainLogo from '../assets/images/BFI_logo.svg'
 import homeImage from '../assets/images/Thumbnail_Final.webp'
+import apiService from '../services/api';
 
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setSignedIn } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // You can add real auth here
-    if (email && password) {
-      setSignedIn(true);
-      navigate('/upload');
-    } else {
-      alert('Please fill out all fields.');
+    setError('');
+    setIsLoading(true);
+    
+    try {
+      const result = await apiService.login(email, password);
+      if (result.success) {
+        login(result.token, result.user);
+        navigate('/upload');
+      }
+    } catch (error) {
+      setError(error.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +71,10 @@ export default function Home() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button type="submit">Continue</button>
+            {error && <p style={{ color: 'red', fontSize: '14px', marginTop: '10px' }}>{error}</p>}
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? 'Logging in...' : 'Continue'}
+            </button>
           </form>
         </div>
       </div>
