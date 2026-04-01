@@ -130,6 +130,9 @@ jspm_packages/
 backend/uploads/
 uploads/
 
+# Figma design assets (not for submission)
+AIHubFigmaDesigns/
+
 # Flask
 instance/
 .webassets-cache

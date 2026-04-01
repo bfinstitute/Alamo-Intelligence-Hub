@@ -1,0 +1,99 @@
+/* ── Sidebar Shell ── */
+.sidebar {
+  width: 180px;
+  min-width: 180px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-right: 1px solid var(--Grey-200);
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+/* ── Logo ── */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px 24px 16px;
+}
+
+.sidebar-logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.sidebar-logo-text {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--Grey-1000);
+  letter-spacing: 0.1px;
+}
+
+/* ── Nav ── */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 8px;
+  flex: 1;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  font-weight: 450;
+  color: var(--Grey-700);
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-nav-item:hover {
+  background: var(--Grey-100);
+  color: var(--Grey-1000);
+}
+
+.sidebar-nav-item.active {
+  background: var(--Primary-100);
+  color: var(--Primary-600);
+}
+
+.sidebar-nav-item.active .sidebar-nav-icon {
+  stroke: var(--Primary-600);
+}
+
+.sidebar-nav-icon {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+/* ── Footer / Avatar ── */
+.sidebar-footer {
+  padding: 16px;
+}
+
+.sidebar-avatar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sidebar-avatar-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--Grey-300);
+}

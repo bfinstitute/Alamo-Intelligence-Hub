@@ -1,0 +1,310 @@
+/* ── Page Layout ── */
+.clarification-page {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Left Panel ── */
+.clarification-left {
+  width: 320px;
+  min-width: 280px;
+  border-right: 1px solid var(--Grey-200);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 24px 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.clarification-left-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.clarification-left-label {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 12px;
+  font-weight: 570;
+  color: var(--Grey-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 6px 0;
+}
+
+.clarification-request-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--Grey-100);
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 12px;
+  font-weight: 570;
+  color: var(--Grey-700);
+}
+
+.clarification-left-title {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0 0 8px 0;
+}
+
+.clarification-left-sub {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Grey-600);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+/* ── Flagged Items ── */
+.clarification-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.clarification-item {
+  border: 1px solid var(--Grey-200);
+  border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.clarification-item:hover {
+  background: var(--Grey-100);
+}
+
+.clarification-item.open {
+  border-color: var(--Primary-300);
+  background: var(--Primary-100);
+}
+
+.clarification-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clarification-item-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--Primary-500);
+  flex-shrink: 0;
+}
+
+.clarification-item-title {
+  flex: 1;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  font-weight: 570;
+  color: var(--Grey-900);
+}
+
+.clarification-item-chevron {
+  flex-shrink: 0;
+  color: var(--Grey-500);
+}
+
+.clarification-item-desc {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Grey-700);
+  margin: 10px 0 0 18px;
+  line-height: 1.5;
+}
+
+/* ── Left Footer ── */
+.clarification-left-footer {
+  display: flex;
+  gap: 10px;
+  padding-top: 20px;
+  margin-top: auto;
+  border-top: 1px solid var(--Grey-200);
+}
+
+.clarification-nav-btn {
+  flex: 1;
+  height: 38px;
+  border-radius: 20px;
+  border: 1px solid var(--Grey-200);
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  font-weight: 570;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.clarification-nav-btn.secondary {
+  background: #fff;
+  color: var(--Grey-800);
+}
+
+.clarification-nav-btn.secondary:hover {
+  background: var(--Grey-100);
+}
+
+.clarification-nav-btn.primary {
+  background: var(--Primary-600);
+  color: #fff;
+  border-color: transparent;
+}
+
+.clarification-nav-btn.primary:hover {
+  background: var(--Primary-950);
+}
+
+/* ── Right Panel ── */
+.clarification-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.clarification-right-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 28px 16px 28px;
+  border-bottom: 1px solid var(--Grey-200);
+  flex-shrink: 0;
+}
+
+.clarification-right-title {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 18px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0 0 4px 0;
+}
+
+.clarification-right-meta {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Grey-500);
+  margin: 0;
+}
+
+.clarification-right-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.issues-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #FEE2E2;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 12px;
+  font-weight: 570;
+  color: #C53030;
+}
+
+.issues-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Grey-700);
+  cursor: pointer;
+}
+
+.issues-toggle {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  border: none;
+  background: var(--Grey-300);
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.issues-toggle.on {
+  background: var(--Primary-600);
+}
+
+.issues-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.2s;
+}
+
+.issues-toggle.on .issues-toggle-thumb {
+  left: 19px;
+}
+
+/* ── Data Table ── */
+.clarification-table-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 20px 28px;
+}
+
+.clarification-no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  color: var(--Grey-600);
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+}
+
+.clarification-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 12px;
+}
+
+.clarification-table thead th {
+  padding: 8px 10px;
+  text-align: left;
+  font-weight: 570;
+  color: var(--Grey-600);
+  border-bottom: 1px solid var(--Grey-200);
+  white-space: nowrap;
+  background: #fff;
+  position: sticky;
+  top: 0;
+}
+
+.clarification-table tbody td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--Grey-100);
+  color: var(--Grey-800);
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.flagged-row {
+  background: #FFF5F5;
+}
+
+.flagged-cell {
+  color: #C53030;
+  background: #FFF5F5;
+}

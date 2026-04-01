@@ -1,165 +1,324 @@
-/*  -- Main Upload Page Container -- */
-.upload-page {
-    display: flex;
-    min-height: 100vh;
-    /* height: auto; */
-    padding: var(--spacing-500) var(--spacing-550);
-    flex-direction: column;
-    /* overflow: hidden; */
+/* ── Page Shell ── */
+.sources-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 28px 32px 32px 32px;
+  box-sizing: border-box;
+  background: #fff;
 }
 
-/*  -- Upload Dropzone Container -- */
-.upload-dropzone {
-    flex: 1;
-    flex-direction: column;
-    padding: 71px;
-    background-color: var(--Grey-50);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius: var(--spacing-450);
-    border: 1px solid var(--Grey-200);
-    background: var(--Grey-50);
-    box-shadow: 0 13.808px 9.205px 0 rgba(255, 255, 255, 0.36) inset, 0 22.405px 22.405px 0 rgba(97, 97, 97, 0.05), 0 3.201px 6.401px 0 rgba(81, 82, 86, 0.14), 0 83.414px 111.218px 0 rgba(0, 0, 0, 0.03);
-    backdrop-filter: blur(27.61508560180664px);
+/* ── Top Bar ── */
+.sources-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }
 
-.upload-area {
-    outline: 2px dashed var(--Grey-300); /* Inner dashed border */
-    outline-offset: -16px; /* Adjusts the position of the outline relative to the border */
+.sources-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.dropzone-content {
-    /* border: 10px solid red; */
-    color: #4a5568;
-    display: flex;
-    max-width: 236px;
-    flex-direction: column;
-    align-items: center;
+.sources-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 22px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0;
+  letter-spacing: -0.2px;
+  cursor: pointer;
 }
 
-.dropzone-content img {
-    width: 125px;
-    height: 125px;
+.sources-view-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.dropzone-text {
-    color: var(--Grey-1000);
-    font-feature-settings: 'ss01' on;
-
-    /* Heading 2 */
-    font-family: "Saans TRIAL";
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 670;
-    line-height: 29px; /* 120.833% */
-    letter-spacing: 0.24px;
+.view-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--Grey-500);
+  transition: background 0.15s, color 0.15s;
 }
 
-.file-name {
-    /* font-size: 10px; */
-    padding: 0px 16px 16px 16px;
-    text-align: center;
-    word-break: break-all;
-    /* border: 10px solid red; */
+.view-icon-btn:hover {
+  background: var(--Grey-100);
+  color: var(--Grey-800);
 }
 
-.attach-button {
-    /* Button Styles */
-    height: 66px;
-    padding: 16px 24px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    border-radius: var(--spacing-600);
-    background: var(--Primary-600);
-    border-color: transparent;
-    cursor: pointer;
-
-    /* Button Text */
-    color: var(--Grey-50);
-    font-family: "Saans TRIAL";
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 570;
-    line-height: 19px; /* 118.75% */
-    text-transform: capitalize;
+.view-icon-btn.active {
+  color: var(--Grey-1000);
 }
 
-.attach-button:hover {
-    background-color: var(--Primary-950);
+/* ── Top Bar Right ── */
+.sources-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.upload-input {
-    display: none;
+.storage-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--Grey-200);
+  border-radius: 20px;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Grey-700);
 }
 
-
-/* -- CSV Preview -- */
-.preview-table {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    box-sizing: border-box; /* Prevent padding from adding extra width */
-    margin-bottom: 1rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
+.storage-text {
+  font-weight: 500;
+  color: var(--Grey-800);
 }
 
-.preview-table table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
+.storage-used {
+  color: var(--Grey-500);
 }
 
-.preview-table th,
-.preview-table td {
-    border: 1px solid #e2e8f0;
-    padding: 0.5rem;
-    color: #2d3748;
+.storage-info-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--Grey-500);
+  transition: background 0.15s;
 }
 
-.preview-header {
-    cursor: pointer;
+.storage-info-btn:hover {
+  background: var(--Grey-100);
 }
 
-.header-tooltip {
-    margin: 10px 0;
-    padding: 8px;
-    background-color: #edf2f7;
-    color: black;
-    border: 1px solid #90caf9;
-    border-radius: 4px;
+.upload-btn {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: 20px;
+  border: none;
+  background: var(--Primary-600);
+  color: #fff;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  font-weight: 570;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
-/* Tablet and down */
-@media screen and (max-width: 768px) {
-    .upload-page {
-        flex-direction: column;
-        height: auto;
-    }
-    .dropzone-content {
-        font-size: 1.5rem;
-    }
-
-    .preview-table table {
-        font-size: 0.85rem;
-    }
+.upload-btn:hover {
+  background: var(--Primary-950);
 }
 
-/* Mobile and small screens */
-@media screen and (max-width: 480px) {
-    .dropzone-content {
-        font-size: 1.2rem;
-    }
+/* ── Filter Pills ── */
+.sources-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
 
-    .dropzone-content p {
-        font-size: 1rem;
-    }
+.filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--Grey-200);
+  border-radius: 20px;
+  background: #fff;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  font-weight: 450;
+  color: var(--Grey-800);
+  cursor: pointer;
+  transition: background 0.15s;
+}
 
-    .preview-table table {
-        font-size: 0.75rem;
-    }
+.filter-pill:hover {
+  background: var(--Grey-100);
+}
+
+/* ── Drop Zone ── */
+.sources-dropzone {
+  flex: 1;
+  border-radius: 16px;
+  border: 2px dashed var(--Grey-300);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  min-height: 400px;
+}
+
+.sources-dropzone.dragging {
+  background: var(--Primary-200);
+  border-color: var(--Primary-400);
+}
+
+.upload-input-hidden {
+  display: none;
+}
+
+/* ── Empty State ── */
+.dropzone-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  max-width: 360px;
+  color: var(--Grey-700);
+}
+
+.dropzone-empty-title {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 22px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0;
+}
+
+.dropzone-empty-sub {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  color: var(--Grey-600);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.upload-status-text {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: var(--Primary-600);
+  margin: 0;
+}
+
+.upload-error-text {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 13px;
+  color: #e53e3e;
+  margin: 0;
+}
+
+/* ── Drag Active State ── */
+.dropzone-drag-active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  max-width: 420px;
+  color: var(--Primary-600);
+}
+
+.dropzone-drag-title {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 24px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0;
+}
+
+.dropzone-drag-sub {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  color: var(--Grey-700);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dropzone-drag-btn {
+  height: 56px;
+  padding: 0 28px;
+  border-radius: 28px;
+  border: none;
+  background: var(--Primary-600);
+  color: #fff;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 15px;
+  font-weight: 570;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.dropzone-drag-btn:hover {
+  background: var(--Primary-950);
+}
+
+/* ── Success Modal Overlay ── */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.success-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 36px;
+  max-width: 400px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.success-modal-title {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 20px;
+  font-weight: 650;
+  color: var(--Grey-1000);
+  margin: 0;
+}
+
+.success-modal-body {
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  color: var(--Grey-700);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.success-modal-btn {
+  align-self: center;
+  margin-top: 8px;
+  height: 42px;
+  padding: 0 28px;
+  border-radius: 21px;
+  border: none;
+  background: var(--Primary-600);
+  color: #fff;
+  font-family: "Saans TRIAL", sans-serif;
+  font-size: 14px;
+  font-weight: 570;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.success-modal-btn:hover {
+  background: var(--Primary-950);
 }
