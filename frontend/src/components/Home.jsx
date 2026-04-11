@@ -19,7 +19,7 @@ export default function Home() {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-    
+
     try {
       const result = await apiService.login(email, password);
       if (result.success) {
